@@ -212,6 +212,15 @@ module Htmlcompressor
       assert_equal result, @compressor.compress(source)
     end
 
+    def test_remove_surrounding_spaces
+      source = read_resource("testSurroundingSpaces.html")
+      result = read_resource("testSurroundingSpacesResult.html")
+
+      @compressor.set_remove_intertag_spaces(true)
+      @compressor.set_remove_surrounding_spaces("p,br")
+
+      assert_equal result, @compressor.compress(source)
+    end
 
     private
 

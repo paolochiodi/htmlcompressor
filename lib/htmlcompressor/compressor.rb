@@ -78,8 +78,8 @@ module Htmlcompressor
     EVENT_PATTERN1 = Regexp.new("(\\son[a-z]+\\s*=\\s*\")([^\"\\\\\\r\\n]*(?:\\\\.[^\"\\\\\\r\\n]*)*)(\")", Regexp::IGNORECASE) # unmasked: \son[a-z]+\s*=\s*"[^"\\\r\n]*(?:\\.[^"\\\r\n]*)*""
     EVENT_PATTERN2 = Regexp.new("(\\son[a-z]+\\s*=\\s*')([^'\\\\\\r\\n]*(?:\\\\.[^'\\\\\\r\\n]*)*)(')", Regexp::IGNORECASE)
     LINE_BREAK_PATTERN = Regexp.new("(?:\\p{Blank}*(\\r?\\n)\\p{Blank}*)+")
-    SURROUNDING_SPACESMIN_PATTERN = Regexp.new("\\s*(</?(?:" + BLOCK_TAGS_MIN.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
-    SURROUNDING_SPACESMAX_PATTERN = Regexp.new("\\s*(</?(?:" + BLOCK_TAGS_MAX.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
+    SURROUNDING_SPACES_MIN_PATTERN = Regexp.new("\\s*(</?(?:" + BLOCK_TAGS_MIN.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
+    SURROUNDING_SPACES_MAX_PATTERN = Regexp.new("\\s*(</?(?:" + BLOCK_TAGS_MAX.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
     SURROUNDING_SPACES_ALL_PATTERN = Regexp.new("\\s*(<[^>]+>)\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
 
     # patterns for searching for temporary replacements
@@ -204,6 +204,10 @@ module Htmlcompressor
 
     def set_preserve_line_breaks preserve_line_breaks
       @preserveLineBreaks = preserve_line_breaks
+    end
+
+    def set_remove_surrounding_spaces remove_surrounding_spaces
+      @removeSurroundingSpaces = remove_surrounding_spaces
     end
 
     def compress html
@@ -631,7 +635,7 @@ module Htmlcompressor
       html = removeQuotesInsideTags(html)
 
       # # remove surrounding spaces
-      # html = removeSurroundingSpaces(html)
+      html = removeSurroundingSpaces(html)
 
       html.strip
     end
@@ -814,6 +818,28 @@ module Htmlcompressor
       # simplify boolean attributes
       if @simpleBooleanAttributes
         html = html.gsub(BOOLEAN_ATTR_PATTERN, '\1\2\4')
+      end
+
+      html
+    end
+
+
+    def removeSurroundingSpaces(html)
+      # remove spaces around provided tags
+
+      unless @removeSurroundingSpaces.nil?
+        pattern = case @removeSurroundingSpaces.downcase
+        when BLOCK_TAGS_MIN
+          SURROUNDING_SPACES_MIN_PATTERN
+        when BLOCK_TAGS_MAX
+          SURROUNDING_SPACES_MAX_PATTERN
+        when ALL_TAGS
+          SURROUNDING_SPACES_ALL_PATTERN
+        else
+          Regexp.new("\\s*(</?(?:" + @removeSurroundingSpaces.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
+        end
+
+        html = html.gsub(pattern, '\1')
       end
 
       html
