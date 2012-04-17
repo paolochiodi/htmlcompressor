@@ -210,6 +210,10 @@ module Htmlcompressor
       @removeSurroundingSpaces = remove_surrounding_spaces
     end
 
+    def set_simple_boolean_attributes simple_boolean_attributes
+      @simpleBooleanAttributes = simple_boolean_attributes
+    end
+
     def compress html
       if not @enabled or html.nil? or html.length == 0
         return html
@@ -613,8 +617,8 @@ module Htmlcompressor
       # remove input attributes
       html = removeInputAttributes(html)
 
-      # # simplify boolean attributes
-      # html = simpleBooleanAttributes(html)
+      # simplify boolean attributes
+      html = simpleBooleanAttributes(html)
 
       # remove http from attributes
       html = removeHttpProtocol(html)
@@ -752,7 +756,6 @@ module Htmlcompressor
       html
     end
 
-
     def removeIntertagSpaces(html)
 
       # remove inter-tag spaces
@@ -822,7 +825,6 @@ module Htmlcompressor
 
       html
     end
-
 
     def removeSurroundingSpaces(html)
       # remove spaces around provided tags

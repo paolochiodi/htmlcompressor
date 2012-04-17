@@ -222,6 +222,15 @@ module Htmlcompressor
       assert_equal result, @compressor.compress(source)
     end
 
+    def test_simple_boolean_attributes
+      source = read_resource("testSimpleBooleanAttributes.html")
+      result = read_resource("testSimpleBooleanAttributesResult.html")
+
+      @compressor.set_simple_boolean_attributes(true)
+
+      assert_equal result, @compressor.compress(source)
+    end
+
     private
 
     def resource_path
