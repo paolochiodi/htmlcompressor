@@ -202,6 +202,10 @@ module Htmlcompressor
       @removeHttpsProtocol = remove_https_protocol
     end
 
+    def set_preserve_line_breaks preserve_line_breaks
+      @preserveLineBreaks = preserve_line_breaks
+    end
+
     def compress html
       if not @enabled or html.nil? or html.length == 0
         return html

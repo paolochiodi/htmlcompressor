@@ -203,6 +203,16 @@ module Htmlcompressor
       assert_equal result, @compressor.compress(source)
     end
 
+    def test_preserve_line_breaks
+      source = read_resource("testPreserveLineBreaks.html")
+      result = read_resource("testPreserveLineBreaksResult.html")
+
+      @compressor.set_preserve_line_breaks(true)
+
+      assert_equal result, @compressor.compress(source)
+    end
+
+
     private
 
     def resource_path
