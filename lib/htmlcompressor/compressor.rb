@@ -71,7 +71,7 @@ module Htmlcompressor
     FORM_METHOD_ATTR_PATTERN = Regexp.new("(<form[^>]*)method\\s*=\\s*([\"']*)get\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     INPUT_TYPE_ATTR_PATTERN = Regexp.new("(<input[^>]*)type\\s*=\\s*([\"']*)text\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     BOOLEAN_ATTR_PATTERN = Regexp.new("(<\\w+[^>]*)(checked|selected|disabled|readonly)\\s*=\\s*([\"']*)\\w*\\3([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
-    EVENTJSPROTOCOL_PATTERN = Regexp.new("^javascript:\\s*(.+)", Regexp::MULTILINE | Regexp::IGNORECASE)
+    EVENT_JS_PROTOCOL_PATTERN = Regexp.new("^javascript:\\s*(.+)", Regexp::MULTILINE | Regexp::IGNORECASE)
     HTTP_PROTOCOL_PATTERN = Regexp.new("(<[^>]+?(?:href|src|cite|action)\\s*=\\s*['\"])http:(//[^>]+?>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     HTTPS_PROTOCOL_PATTERN = Regexp.new("(<[^>]+?(?:href|src|cite|action)\\s*=\\s*['\"])https:(//[^>]+?>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     REL_EXTERNAL_PATTERN = Regexp.new("<(?:[^>]*)rel\\s*=\\s*([\"']*)(?:alternate\\s+)?external\\1(?:[^>]*)>", Regexp::MULTILINE | Regexp::IGNORECASE)
@@ -184,6 +184,14 @@ module Htmlcompressor
 
     def set_remove_form_attributes remove_form_attributes
       @removeFormAttributes = remove_form_attributes
+    end
+
+    def set_remove_input_attributes remove_input_attributes
+      @removeInputAttributes = remove_input_attributes
+    end
+
+    def set_remove_javascript_protocol remove_javascript_protocol
+      @removeJavaScriptProtocol = remove_javascript_protocol
     end
 
     def compress html
@@ -481,7 +489,7 @@ module Htmlcompressor
       # processTextAreaBlocks(taBlocks)
       processScriptBlocks(scriptBlocks)
       processStyleBlocks(styleBlocks)
-      # processEventBlocks(eventBlocks)
+      processEventBlocks(eventBlocks)
       # processCondCommentBlocks(condCommentBlocks)
       # processSkipBlocks(skipBlocks)
       # processUserBlocks(userBlocks)
@@ -500,6 +508,14 @@ module Htmlcompressor
       if @compressCss
         styleBlocks.map! do |block|
           compressCssStyles(block)
+        end
+      end
+    end
+
+    def processEventBlocks(eventBlocks)
+      if @removeJavaScriptProtocol
+        eventBlocks.map! do |block|
+          removeJavaScriptProtocol(block)
         end
       end
     end
@@ -553,6 +569,11 @@ module Htmlcompressor
       result
     end
 
+    def removeJavaScriptProtocol(source)
+      # remove javascript: from inline events
+      source.sub(EVENT_JS_PROTOCOL_PATTERN, '\1')
+    end
+
     def processHtml(html)
 
       # remove comments
@@ -573,8 +594,8 @@ module Htmlcompressor
       # remove form attributes
       html = removeFormAttributes(html)
 
-      # # remove input attributes
-      # html = removeInputAttributes(html)
+      # remove input attributes
+      html = removeInputAttributes(html)
 
       # # simplify boolean attributes
       # html = simpleBooleanAttributes(html)
@@ -670,6 +691,15 @@ module Htmlcompressor
       html
     end
 
+    def removeInputAttributes(html)
+      # remove type from input tags
+      if @removeInputAttributes
+        html = html.gsub(INPUT_TYPE_ATTR_PATTERN, '\1\3')
+      end
+
+      html
+    end
+
     def removeIntertagSpaces(html)
 
       # remove inter-tag spaces
@@ -726,6 +756,15 @@ module Htmlcompressor
       # collapse multiple spaces
       if @removeMultiSpaces
         html = html.gsub(MULTISPACE_PATTERN, ' ')
+      end
+
+      html
+    end
+
+    def simple_boolean_attributes(html)
+      # simplify boolean attributes
+      if @simpleBooleanAttributes
+        html = html.gsub(BOOLEAN_ATTR_PATTERN, '\1\2\4')
       end
 
       html

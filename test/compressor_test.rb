@@ -167,6 +167,24 @@ module Htmlcompressor
       assert_equal result, @compressor.compress(source)
     end
 
+    def test_remove_input_attributes
+      source = read_resource("testRemoveInputAttributes.html")
+      result = read_resource("testRemoveInputAttributesResult.html")
+
+      @compressor.set_remove_input_attributes(true)
+
+      assert_equal result, @compressor.compress(source)
+    end
+
+    def test_remove_javascript_protocol
+      source = read_resource("testRemoveJavaScriptProtocol.html")
+      result = read_resource("testRemoveJavaScriptProtocolResult.html")
+
+      @compressor.set_remove_javascript_protocol(true)
+
+      assert_equal result, @compressor.compress(source)
+    end
+
     private
 
     def resource_path
