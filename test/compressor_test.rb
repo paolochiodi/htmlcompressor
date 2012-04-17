@@ -185,6 +185,24 @@ module Htmlcompressor
       assert_equal result, @compressor.compress(source)
     end
 
+    def test_remove_http_protocol
+      source = read_resource("testRemoveHttpProtocol.html")
+      result = read_resource("testRemoveHttpProtocolResult.html")
+
+      @compressor.set_remove_http_protocol(true)
+
+      assert_equal result, @compressor.compress(source)
+    end
+
+    def test_remove_https_protocol
+      source = read_resource("testRemoveHttpsProtocol.html")
+      result = read_resource("testRemoveHttpsProtocolResult.html")
+
+      @compressor.set_remove_https_protocol(true)
+
+      assert_equal result, @compressor.compress(source)
+    end
+
     private
 
     def resource_path

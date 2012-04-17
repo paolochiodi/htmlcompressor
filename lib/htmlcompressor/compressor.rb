@@ -194,6 +194,14 @@ module Htmlcompressor
       @removeJavaScriptProtocol = remove_javascript_protocol
     end
 
+    def set_remove_http_protocol remove_http_protocol
+      @removeHttpProtocol = remove_http_protocol
+    end
+
+    def set_remove_https_protocol remove_https_protocol
+      @removeHttpsProtocol = remove_https_protocol
+    end
+
     def compress html
       if not @enabled or html.nil? or html.length == 0
         return html
@@ -600,11 +608,11 @@ module Htmlcompressor
       # # simplify boolean attributes
       # html = simpleBooleanAttributes(html)
 
-      # # remove http from attributes
-      # html = removeHttpProtocol(html)
+      # remove http from attributes
+      html = removeHttpProtocol(html)
 
-      # # remove https from attributes
-      # html = removeHttpsProtocol(html)
+      # remove https from attributes
+      html = removeHttpsProtocol(html)
 
       # remove inter-tag spaces
       html = removeIntertagSpaces(html)
@@ -700,6 +708,43 @@ module Htmlcompressor
       html
     end
 
+    def removeHttpProtocol(html)
+      # remove http protocol from tag attributes
+      if @removeHttpProtocol
+        html = html.gsub(HTTP_PROTOCOL_PATTERN) do |match|
+          group_1 = $1
+          group_2 = $2
+
+          if match =~ REL_EXTERNAL_PATTERN
+            match
+          else
+            "#{group_1}#{group_2}"
+          end
+        end
+      end
+
+      html
+    end
+
+    def removeHttpsProtocol(html)
+      # remove https protocol from tag attributes
+      if @removeHttpsProtocol
+        html = html.gsub(HTTPS_PROTOCOL_PATTERN) do |match|
+          group_1 = $1
+          group_2 = $2
+
+          if match =~ REL_EXTERNAL_PATTERN
+            match
+          else
+            "#{group_1}#{group_2}"
+          end
+        end
+      end
+
+      html
+    end
+
+
     def removeIntertagSpaces(html)
 
       # remove inter-tag spaces
@@ -761,7 +806,7 @@ module Htmlcompressor
       html
     end
 
-    def simple_boolean_attributes(html)
+    def simpleBooleanAttributes(html)
       # simplify boolean attributes
       if @simpleBooleanAttributes
         html = html.gsub(BOOLEAN_ATTR_PATTERN, '\1\2\4')
