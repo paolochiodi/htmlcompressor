@@ -2,7 +2,7 @@ require 'htmlcompressor/compressor'
 require 'minitest/autorun'
 require 'closure-compiler'
 
-module Htmlcompressor
+module HtmlCompressor
 
   class TestCompressor < MiniTest::Unit::TestCase
 

@@ -1,5 +1,6 @@
 require "htmlcompressor/version"
 require "htmlcompressor/compressor"
+require "htmlcompressor/rack"
 
-module Htmlcompressor
+module HtmlCompressor
 end

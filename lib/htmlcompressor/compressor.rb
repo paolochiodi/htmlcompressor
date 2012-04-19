@@ -1,6 +1,6 @@
 require "yui/compressor"
 
-module Htmlcompressor
+module HtmlCompressor
   class Compressor
 
     JS_COMPRESSOR_YUI = "yui";

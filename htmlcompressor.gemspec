@@ -4,8 +4,8 @@ require File.expand_path('../lib/htmlcompressor/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Paolo Chiodi"]
   gem.email         = ["chiodi84@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Put your html on a diet}
+  gem.summary       = %q{htmlcompressor provides a class and a rack middleware to minify html pages}
   gem.homepage      = ""
 
   gem.add_dependency 'yui-compressor', '~> 0.9.6'
@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "htmlcompressor"
   gem.require_paths = ["lib"]
-  gem.version       = Htmlcompressor::VERSION
+  gem.version       = HtmlCompressor::VERSION
 end
