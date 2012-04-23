@@ -5,25 +5,27 @@ module HtmlCompressor
       def initialize app
         @app = app
 
-        @compressor = Htmlcompressor::Compressor.new
-        @compressor.set_enabled true
-        @compressor.set_remove_multi_spaces true
-        @compressor.set_remove_comments true
-        @compressor.set_remove_intertag_spaces true
-        @compressor.set_remove_quotes true
-        @compressor.set_compress_css false
-        @compressor.set_compress_javascript false
-        @compressor.set_simple_doctype false
-        @compressor.set_remove_script_attributes true
-        @compressor.set_remove_style_attributes true
-        @compressor.set_remove_link_attributes true
-        @compressor.set_remove_form_attributes false
-        @compressor.set_remove_input_attributes true
-        @compressor.set_remove_javascript_protocol true
-        @compressor.set_remove_http_protocol true
-        @compressor.set_remove_https_protocol false
-        @compressor.set_preserve_line_breaks false
-        @compressor.set_simple_boolean_attributes true
+        @compressor = Htmlcompressor::Compressor.new(
+          :enabled => true,
+          :remove_multi_spaces => true,
+          :remove_comments => true,
+          :remove_intertag_spaces => true,
+          :remove_quotes => true,
+          :compress_css => false,
+          :compress_javascript => false,
+          :simple_doctype => false,
+          :remove_script_attributes => true,
+          :remove_style_attributes => true,
+          :remove_link_attributes => true,
+          :remove_form_attributes => false,
+          :remove_input_attributes => true,
+          :remove_javascript_protocol => true,
+          :remove_http_protocol => true,
+          :remove_https_protocol => false,
+          :preserve_line_breaks => false,
+          :simple_boolean_attributes => true
+        )
+
       end
 
       def call env

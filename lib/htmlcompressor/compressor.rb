@@ -92,35 +92,39 @@ module HtmlCompressor
     TEMP_SKIP_PATTERN = Regexp.new("%%%~COMPRESS~SKIP~(\\d+?)~%%%")
     TEMP_LINE_BREAK_PATTERN = Regexp.new("%%%~COMPRESS~LT~(\\d+?)~%%%")
 
-
-    def initialize
-      @enabled = true
+    DEFAULT_OPTIONS = {
+      :enabled => true,
 
       # default settings
-      @removeComments = true
-      @removeMultiSpaces = true
+      :remove_comments => true,
+      :remove_multi_spaces => true,
 
       # optional settings
-      @removeIntertagSpaces = false;
-      @removeQuotes = false
-      @compressJavaScript = false
-      @compressCss = false
-      @simpleDoctype = false
-      @removeScriptAttributes = false
-      @removeStyleAttributes = false
-      @removeLinkAttributes = false
-      @removeFormAttributes = false
-      @removeInputAttributes = false
-      @simpleBooleanAttributes = false
-      @removeJavaScriptProtocol = false
-      @removeHttpProtocol = false
-      @removeHttpsProtocol = false
-      @preserveLineBreaks = false
-      @removeSurroundingSpaces = nil
+      :remove_intertag_spaces => false,
+      :remove_quotes => false,
+      :compress_javascript => false,
+      :compress_css => false,
+      :simple_doctype => false,
+      :remove_script_attributes => false,
+      :remove_style_attributes => false,
+      :remove_link_attributes => false,
+      :remove_form_attributes => false,
+      :remove_input_attributes => false,
+      :simple_boolean_attributes => false,
+      :remove_javascript_protocol => false,
+      :remove_http_protocol => false,
+      :remove_https_protocol => false,
+      :preserve_line_breaks => false,
+      :remove_surrounding_spaces => nil,
 
-      @preservePatterns = nil
-      @javaScriptCompressor = nil
-      @cssCompressor = nil
+      :preserve_patterns => nil,
+      :javascript_compressor => nil,
+      :css_compressor => nil
+    }
+
+    def initialize(options = {})
+
+      @options = DEFAULT_OPTIONS.merge(options)
 
       # YUICompressor settings
       @yuiCssLineBreak = -1
@@ -130,92 +134,8 @@ module HtmlCompressor
 
     end
 
-    def set_enabled enabled
-      @enabled = enabled
-    end
-
-    def set_remove_multi_spaces multi_spaces
-      @removeMultiSpaces = multi_spaces
-    end
-
-    def set_remove_comments comments
-      @removeComments = comments
-    end
-
-    def set_remove_intertag_spaces intertag_spaces
-      @removeIntertagSpaces = intertag_spaces
-    end
-
-    def set_remove_quotes remove_quotes
-      @removeQuotes = remove_quotes
-    end
-
-    def set_preserve_patterns preserve_patterns
-      @preservePatterns = preserve_patterns
-    end
-
-    def set_compress_css compressCss
-      @compressCss = compressCss
-    end
-
-    def set_compress_javascript compressJavaScript
-      @compressJavaScript = compressJavaScript
-    end
-
-    def set_javascript_compressor compressor
-      @javaScriptCompressor = compressor
-    end
-
-    def set_simple_doctype simple_doctype
-      @simpleDoctype = simple_doctype
-    end
-
-    def set_remove_script_attributes remove_script_attributes
-      @removeScriptAttributes = remove_script_attributes
-    end
-
-    def set_remove_style_attributes remove_style_attributes
-      @removeStyleAttributes = remove_style_attributes
-    end
-
-    def set_remove_link_attributes remove_link_attributes
-      @removeLinkAttributes = remove_link_attributes
-    end
-
-    def set_remove_form_attributes remove_form_attributes
-      @removeFormAttributes = remove_form_attributes
-    end
-
-    def set_remove_input_attributes remove_input_attributes
-      @removeInputAttributes = remove_input_attributes
-    end
-
-    def set_remove_javascript_protocol remove_javascript_protocol
-      @removeJavaScriptProtocol = remove_javascript_protocol
-    end
-
-    def set_remove_http_protocol remove_http_protocol
-      @removeHttpProtocol = remove_http_protocol
-    end
-
-    def set_remove_https_protocol remove_https_protocol
-      @removeHttpsProtocol = remove_https_protocol
-    end
-
-    def set_preserve_line_breaks preserve_line_breaks
-      @preserveLineBreaks = preserve_line_breaks
-    end
-
-    def set_remove_surrounding_spaces remove_surrounding_spaces
-      @removeSurroundingSpaces = remove_surrounding_spaces
-    end
-
-    def set_simple_boolean_attributes simple_boolean_attributes
-      @simpleBooleanAttributes = simple_boolean_attributes
-    end
-
     def compress html
-      if not @enabled or html.nil? or html.length == 0
+      if not @options[:enabled] or html.nil? or html.length == 0
         return html
       end
 
@@ -231,27 +151,28 @@ module HtmlCompressor
       userBlocks = []
 
       # preserve blocks
-      html = preserveBlocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
+      html = preserve_blocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
 
       # process pure html
-      html = processHtml(html)
+      html = process_html(html)
 
       # process preserved blocks
-      processPreservedBlocks(preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
+      process_preserved_blocks(preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
 
       # put preserved blocks back
-      html = returnBlocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
+      html = return_blocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
 
       html
     end
 
     private
 
-    def preserveBlocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
+    def preserve_blocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
 
       # preserve user blocks
-      unless (@preservePatterns.nil?)
-        @preservePatterns.each_with_index do |preservePattern, i|
+      preservePatterns = @options[:preserve_patterns]
+      unless (preservePatterns.nil?)
+        preservePatterns.each_with_index do |preservePattern, i|
           userBlock = []
           index = -1
 
@@ -392,7 +313,7 @@ module HtmlCompressor
       end
 
       # preserve line breaks
-      if @preserveLineBreaks
+      if @options[:preserve_line_breaks]
         index = -1
         html = html.gsub(LINE_BREAK_PATTERN) do |match|
           lineBreakBlocks << $1
@@ -404,10 +325,10 @@ module HtmlCompressor
       html
     end
 
-    def returnBlocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
+    def return_blocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
 
       # put line breaks back
-      if @preserveLineBreaks
+      if @options[:preserve_line_breaks]
         html = html.gsub(TEMP_LINE_BREAK_PATTERN) do |match|
           i = $1.to_i
           if lineBreakBlocks.size > i
@@ -487,8 +408,8 @@ module HtmlCompressor
       end
 
       # put user blocks back
-      unless @preservePatterns.nil?
-        @preservePatterns.each_with_index do |preservePattern, p|
+      unless @options[:preserve_patterns].nil?
+        @options[:preserve_patterns].each_with_index do |preservePattern, p|
           tempUserPattern = Regexp.new("%%%~COMPRESS~USER#{p}~(\\d+?)~%%%")
           html = html.gsub(tempUserPattern).each do |match|
             i = $1.to_i
@@ -504,46 +425,48 @@ module HtmlCompressor
       html
     end
 
-    def processPreservedBlocks(preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
+    def process_preserved_blocks(preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
       # processPreBlocks(preBlocks)
       # processTextAreaBlocks(taBlocks)
-      processScriptBlocks(scriptBlocks)
-      processStyleBlocks(styleBlocks)
-      processEventBlocks(eventBlocks)
+      process_script_blocks(scriptBlocks)
+      process_style_blocks(styleBlocks)
+      process_event_blocks(eventBlocks)
       # processCondCommentBlocks(condCommentBlocks)
       # processSkipBlocks(skipBlocks)
       # processUserBlocks(userBlocks)
       # processLineBreakBlocks(lineBreakBlocks)
     end
 
-    def processScriptBlocks(scriptBlocks)
-      if @compressJavaScript
+    def process_script_blocks(scriptBlocks)
+      if @options[:compress_javascript]
         scriptBlocks.map! do |block|
-          compressJavaScript(block)
+          compress_javascript(block)
         end
       end
     end
 
-    def processStyleBlocks(styleBlocks)
-      if @compressCss
+    def process_style_blocks(styleBlocks)
+      if @options[:compress_css]
         styleBlocks.map! do |block|
-          compressCssStyles(block)
+          compress_css_styles(block)
         end
       end
     end
 
-    def processEventBlocks(eventBlocks)
-      if @removeJavaScriptProtocol
+    def process_event_blocks(eventBlocks)
+      if @options[:remove_javascript_protocol]
         eventBlocks.map! do |block|
-          removeJavaScriptProtocol(block)
+          remove_javascript_protocol(block)
         end
       end
     end
 
-    def compressJavaScript(source)
+    def compress_javascript(source)
       # set default javascript compressor
-      if @javaScriptCompressor.nil?
-        @javaScriptCompressor = YUI::JavaScriptCompressor.new(
+      javaScriptCompressor = @options[:javascript_compressor]
+
+      if javaScriptCompressor.nil?
+        javaScriptCompressor = YUI::JavaScriptCompressor.new(
           :munge => !@yuiJsNoMunge,
           :preserve_semicolons => !@yuiJsDisableOptimizations,
           :optimize => !@yuiJsDisableOptimizations,
@@ -558,7 +481,7 @@ module HtmlCompressor
         source = $1
       end
 
-      result = @javaScriptCompressor.compress(source).strip
+      result = javaScriptCompressor.compress(source).strip
 
       if cdataWrapper
         result = "<![CDATA[" + result + "]]>"
@@ -567,10 +490,12 @@ module HtmlCompressor
       result
     end
 
-    def compressCssStyles(source)
+    def compress_css_styles(source)
       # set default css compressor
-      if @cssCompressor.nil?
-        @cssCompressor = YUI::CssCompressor.new(:line_break => @yuiCssLineBreak)
+      cssCompressor = @options[:css_compressor]
+
+      if cssCompressor.nil?
+        cssCompressor = YUI::CssCompressor.new(:line_break => @yuiCssLineBreak)
       end
 
       # detect CDATA wrapper
@@ -580,7 +505,7 @@ module HtmlCompressor
         source = $1
       end
 
-      result = @cssCompressor.compress(source)
+      result = cssCompressor.compress(source)
 
       if cdataWrapper
         result = "<![CDATA[" + result + "]]>"
@@ -589,82 +514,82 @@ module HtmlCompressor
       result
     end
 
-    def removeJavaScriptProtocol(source)
+    def remove_javascript_protocol(source)
       # remove javascript: from inline events
       source.sub(EVENT_JS_PROTOCOL_PATTERN, '\1')
     end
 
-    def processHtml(html)
+    def process_html(html)
 
       # remove comments
-      html = removeComments(html)
+      html = remove_comments(html)
 
       # simplify doctype
-      html = simpleDoctype(html)
+      html = simple_doctype(html)
 
       # remove script attributes
-      html = removeScriptAttributes(html)
+      html = remove_script_attributes(html)
 
       # remove style attributes
-      html = removeStyleAttributes(html)
+      html = remove_style_attributes(html)
 
       # remove link attributes
-      html = removeLinkAttributes(html)
+      html = remove_link_attributes(html)
 
       # remove form attributes
-      html = removeFormAttributes(html)
+      html = remove_form_attributes(html)
 
       # remove input attributes
-      html = removeInputAttributes(html)
+      html = remove_input_attributes(html)
 
       # simplify boolean attributes
-      html = simpleBooleanAttributes(html)
+      html = simple_boolean_attributes(html)
 
       # remove http from attributes
-      html = removeHttpProtocol(html)
+      html = remove_http_protocol(html)
 
       # remove https from attributes
-      html = removeHttpsProtocol(html)
+      html = remove_https_protocol(html)
 
       # remove inter-tag spaces
-      html = removeIntertagSpaces(html)
+      html = remove_intertag_spaces(html)
 
       # remove multi whitespace characters
-      html = removeMultiSpaces(html)
+      html = remove_multi_spaces(html)
 
       # remove spaces around equals sign and ending spaces
-      html = removeSpacesInsideTags(html)
+      html = remove_spaces_inside_tags(html)
 
       # remove quotes from tag attributes
-      html = removeQuotesInsideTags(html)
+      html = remove_quotes_inside_tags(html)
 
       # # remove surrounding spaces
-      html = removeSurroundingSpaces(html)
+      html = remove_surrounding_spaces(html)
 
       html.strip
     end
 
-    def removeComments(html)
+    def remove_comments(html)
 
       # remove comments
-      if @removeComments
+      if @options[:remove_comments]
         html = html.gsub(COMMENT_PATTERN, '')
       end
 
       html
     end
 
-    def simpleDoctype(html)
+    def simple_doctype(html)
       # simplify doctype
-      if @simpleDoctype
+      if @options[:simple_doctype]
         html = html.gsub(DOCTYPE_PATTERN, '<!DOCTYPE html>')
       end
 
       html
     end
 
-    def removeScriptAttributes(html)
-      if @removeScriptAttributes
+    def remove_script_attributes(html)
+      if @options[:remove_script_attributes]
         #remove type from script tags
         html = html.gsub(JS_TYPE_ATTR_PATTERN, '\1\3')
 
@@ -675,18 +600,18 @@ module HtmlCompressor
       html
     end
 
-    def removeStyleAttributes(html)
+    def remove_style_attributes(html)
       # remove type from style tags
-      if @removeStyleAttributes
+      if @options[:remove_style_attributes]
         html = html.gsub(STYLE_TYPE_ATTR_PATTERN, '\1\3')
       end
 
       html
     end
 
-    def removeLinkAttributes(html)
+    def remove_link_attributes(html)
       # remove type from link tags with rel=stylesheet
-      if @removeLinkAttributes
+      if @options[:remove_link_attributes]
         html = html.gsub(LINK_TYPE_ATTR_PATTERN) do |match|
           group_1 = $1
           group_3 = $3
@@ -702,27 +627,27 @@ module HtmlCompressor
       html
     end
 
-    def removeFormAttributes(html)
+    def remove_form_attributes(html)
       # remove method from form tags
-      if @removeFormAttributes
+      if @options[:remove_form_attributes]
         html = html.gsub(FORM_METHOD_ATTR_PATTERN, '\1\3')
       end
 
       html
     end
 
-    def removeInputAttributes(html)
+    def remove_input_attributes(html)
       # remove type from input tags
-      if @removeInputAttributes
+      if @options[:remove_input_attributes]
         html = html.gsub(INPUT_TYPE_ATTR_PATTERN, '\1\3')
       end
 
       html
     end
 
-    def removeHttpProtocol(html)
+    def remove_http_protocol(html)
       # remove http protocol from tag attributes
-      if @removeHttpProtocol
+      if @options[:remove_http_protocol]
         html = html.gsub(HTTP_PROTOCOL_PATTERN) do |match|
           group_1 = $1
           group_2 = $2
@@ -738,9 +663,9 @@ module HtmlCompressor
       html
     end
 
-    def removeHttpsProtocol(html)
+    def remove_https_protocol(html)
       # remove https protocol from tag attributes
-      if @removeHttpsProtocol
+      if @options[:remove_https_protocol]
         html = html.gsub(HTTPS_PROTOCOL_PATTERN) do |match|
           group_1 = $1
           group_2 = $2
@@ -756,10 +681,10 @@ module HtmlCompressor
       html
     end
 
-    def removeIntertagSpaces(html)
+    def remove_intertag_spaces(html)
 
       # remove inter-tag spaces
-      if @removeIntertagSpaces
+      if @options[:remove_intertag_spaces]
         html = html.gsub(INTERTAG_PATTERN_TAG_TAG, '><')
         html = html.gsub(INTERTAG_PATTERN_TAG_CUSTOM, '>%%%~')
         html = html.gsub(INTERTAG_PATTERN_CUSTOM_TAG, '~%%%<')
@@ -769,7 +694,7 @@ module HtmlCompressor
       html
     end
 
-    def removeSpacesInsideTags(html)
+    def remove_spaces_inside_tags(html)
       #remove spaces around equals sign inside tags
 
       html = html.gsub(TAG_PROPERTY_PATTERN, '\1=')
@@ -793,8 +718,8 @@ module HtmlCompressor
       html
     end
 
-    def removeQuotesInsideTags(html)
-      if @removeQuotes
+    def remove_quotes_inside_tags(html)
+      if @options[:remove_quotes]
         html = html.gsub(TAG_QUOTE_PATTERN) do |match|
           # if quoted attribute is followed by "/" add extra space
           if $3.strip.length == 0
@@ -808,29 +733,29 @@ module HtmlCompressor
       html
     end
 
-    def removeMultiSpaces(html)
+    def remove_multi_spaces(html)
       # collapse multiple spaces
-      if @removeMultiSpaces
+      if @options[:remove_multi_spaces]
         html = html.gsub(MULTISPACE_PATTERN, ' ')
       end
 
       html
     end
 
-    def simpleBooleanAttributes(html)
+    def simple_boolean_attributes(html)
       # simplify boolean attributes
-      if @simpleBooleanAttributes
+      if @options[:simple_boolean_attributes]
         html = html.gsub(BOOLEAN_ATTR_PATTERN, '\1\2\4')
       end
 
       html
     end
 
-    def removeSurroundingSpaces(html)
+    def remove_surrounding_spaces(html)
       # remove spaces around provided tags
 
-      unless @removeSurroundingSpaces.nil?
-        pattern = case @removeSurroundingSpaces.downcase
+      unless @options[:remove_surrounding_spaces].nil?
+        pattern = case @options[:remove_surrounding_spaces].downcase
         when BLOCK_TAGS_MIN
           SURROUNDING_SPACES_MIN_PATTERN
         when BLOCK_TAGS_MAX
@@ -838,7 +763,7 @@ module HtmlCompressor
         when ALL_TAGS
           SURROUNDING_SPACES_ALL_PATTERN
         else
-          Regexp.new("\\s*(</?(?:" + @removeSurroundingSpaces.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
+          Regexp.new("\\s*(</?(?:" + @options[:remove_surrounding_spaces].gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
         end
 
         html = html.gsub(pattern, '\1')
