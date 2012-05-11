@@ -10,6 +10,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'yui-compressor', '~> 0.9.6'
   gem.add_development_dependency 'closure-compiler', '~> 1.1.5'
+  gem.add_development_dependency 'rake'
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
