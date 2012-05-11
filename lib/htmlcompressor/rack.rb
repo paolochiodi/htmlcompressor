@@ -5,7 +5,7 @@ module HtmlCompressor
       def initialize app
         @app = app
 
-        @compressor = Htmlcompressor::Compressor.new(
+        @compressor = HtmlCompressor::Compressor.new(
           :enabled => true,
           :remove_multi_spaces => true,
           :remove_comments => true,
