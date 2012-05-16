@@ -772,8 +772,6 @@ module HtmlCompressor
       html
     end
 
-    private
-
     def message_format(message, *params)
       message.gsub(/\{(\d+),number,#\}/) do
         params[$1.to_i]
