@@ -46,10 +46,10 @@ The compressor ships with some default option that may be overwritten passing th
 Using rack middleware is as easy as:
 
 ```ruby
-  config.middleware.use HtmlCompressor::Rack
+  config.middleware.use HtmlCompressor::Rack, options
 ```
 
-It is not yet possible to override default options when using the rack middleware.
+The options has his optional and can be used to overwrite default options
 
 Rails 2.3 users may need to add
 ```ruby
