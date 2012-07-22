@@ -648,7 +648,13 @@ module HtmlCompressor
     def remove_http_protocol(html)
       # remove http protocol from tag attributes
       if @options[:remove_http_protocol]
-        html = html.gsub(HTTP_PROTOCOL_PATTERN) do |match|
+        pattern = case @options[:remove_http_protocol]
+          when true
+            HTTP_PROTOCOL_PATTERN
+          else
+            Regexp.new("(<[^>]+?(?:#{@options[:remove_http_protocol].gsub(",", "|")})\\s*=\\s*['\"])http:(//[^>]+?>)", Regexp::MULTILINE | Regexp::IGNORECASE)
+          end
+        html = html.gsub(pattern) do |match|
           group_1 = $1
           group_2 = $2
 
@@ -666,7 +672,14 @@ module HtmlCompressor
     def remove_https_protocol(html)
       # remove https protocol from tag attributes
       if @options[:remove_https_protocol]
-        html = html.gsub(HTTPS_PROTOCOL_PATTERN) do |match|
+        pattern = case @options[:remove_https_protocol]
+          when true
+            HTTPS_PROTOCOL_PATTERN
+          else
+            Regexp.new("(<[^>]+?(?:#{@options[:remove_https_protocol].gsub(",", "|")})\\s*=\\s*['\"])http:(//[^>]+?>)", Regexp::MULTILINE | Regexp::IGNORECASE)
+          end
+        
+        html = html.gsub(pattern) do |match|
           group_1 = $1
           group_2 = $2
 
