@@ -14,8 +14,8 @@ Please note that Htmlcompressor is still in alpha version and need some addition
 Using the compressor class is straightforward:
 
 ```ruby
-  compressor = HtmlCompressor.Compressor.new
-  compressor.compile('<html><body><div id="compress_me"></div></body></html>')
+  compressor = HtmlCompressor::Compressor.new
+  compressor.compress('<html><body><div id="compress_me"></div></body></html>')
 ```
 
 The compressor ships with some default option that may be overwritten passing the options hash to the constructor:
