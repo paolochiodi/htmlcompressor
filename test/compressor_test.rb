@@ -237,6 +237,15 @@ module HtmlCompressor
       assert_equal result, compressor.compress(source)
     end
 
+    def test_preserve_textarea
+      source = read_resource("testPreserveTextareas.html")
+      result = read_resource("testPreserveTextareasResult.html")
+
+      compressor = Compressor.new
+
+      assert_equal result, compressor.compress(source)
+    end
+
     private
 
     def resource_path

@@ -303,13 +303,15 @@ module HtmlCompressor
       # preserve TEXTAREA tags
       index = -1
       html = html.gsub(TA_PATTERN) do |match|
+        index += 1
+
         if $2.strip.length > 0
           taBlocks << $2
-          index += 1
-          $1 + message_format(TEMP_TEXT_AREA_BLOCK, index) + $3
         else
-          ''
+          taBlocks << ''
         end
+
+        $1 + message_format(TEMP_TEXT_AREA_BLOCK, index) + $3
       end
 
       # preserve line breaks
