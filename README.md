@@ -18,14 +18,45 @@ Using the compressor class is straightforward:
   compressor.compress('<html><body><div id="compress_me"></div></body></html>')
 ```
 
-The compressor ships with some default option that may be overwritten passing the options hash to the constructor:
+The compressor ships with basic and safe default options that may be overwritten passing the options hash to the constructor:
 
 ```ruby
-  option = {
+  options = {
     :enabled => true
     :remove_multi_spaces => true,
     :remove_comments => true,
-    :remove_intertag_spaces => true,
+    :remove_intertag_spaces => fasle,
+    :remove_quotes => fasle,
+    :compress_css => false,
+    :compress_javascript => false,
+    :simple_doctype => false,
+    :remove_script_attributes => fasle,
+    :remove_style_attributes => fasle,
+    :remove_link_attributes => fasle,
+    :remove_form_attributes => fasle,
+    :remove_input_attributes => fasle,
+    :remove_javascript_protocol => fasle,
+    :remove_http_protocol => fasle,
+    :remove_https_protocol => false,
+    :preserve_line_breaks => false,
+    :simple_boolean_attributes => fasle
+  }
+```
+
+Using rack middleware is as easy as:
+
+```ruby
+  config.middleware.use HtmlCompressor::Rack, options
+```
+
+The middleware uses a little more aggressive options by default:
+
+```ruby
+  options = {
+    :enabled => true,
+    :remove_multi_spaces => true,
+    :remove_comments => true,
+    :remove_intertag_spaces => false,
     :remove_quotes => true,
     :compress_css => false,
     :compress_javascript => false,
@@ -42,14 +73,6 @@ The compressor ships with some default option that may be overwritten passing th
     :simple_boolean_attributes => true
   }
 ```
-
-Using rack middleware is as easy as:
-
-```ruby
-  config.middleware.use HtmlCompressor::Rack, options
-```
-
-The options has his optional and can be used to overwrite default options
 
 Rails 2.3 users may need to add
 ```ruby
