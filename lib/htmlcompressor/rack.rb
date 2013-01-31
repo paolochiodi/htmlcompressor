@@ -6,7 +6,7 @@ module HtmlCompressor
       :enabled => true,
       :remove_multi_spaces => true,
       :remove_comments => true,
-      :remove_intertag_spaces => true,
+      :remove_intertag_spaces => false,
       :remove_quotes => true,
       :compress_css => false,
       :compress_javascript => false,
