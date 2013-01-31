@@ -1,3 +1,6 @@
+0.0.5 - 31/01/2013
+  Safer rack default options: remove_intertag_spaces => false
+  README more clear
 0.0.4 - 16/01/2013
   Preserve empty textarea (issue #3)
 0.0.3 - 18/05/2012
