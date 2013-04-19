@@ -1,3 +1,6 @@
+0.0.6 - 19/04/2013
+  Switch to POSIX "bracket expression" from \p{Blank} to provide better ruby compatibility
+  Minor fixes to README
 0.0.5 - 31/01/2013
   Safer rack default options: remove_intertag_spaces => false
   README more clear
