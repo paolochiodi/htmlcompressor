@@ -77,7 +77,7 @@ module HtmlCompressor
     REL_EXTERNAL_PATTERN = Regexp.new("<(?:[^>]*)rel\\s*=\\s*([\"']*)(?:alternate\\s+)?external\\1(?:[^>]*)>", Regexp::MULTILINE | Regexp::IGNORECASE)
     EVENT_PATTERN1 = Regexp.new("(\\son[a-z]+\\s*=\\s*\")([^\"\\\\\\r\\n]*(?:\\\\.[^\"\\\\\\r\\n]*)*)(\")", Regexp::IGNORECASE) # unmasked: \son[a-z]+\s*=\s*"[^"\\\r\n]*(?:\\.[^"\\\r\n]*)*""
     EVENT_PATTERN2 = Regexp.new("(\\son[a-z]+\\s*=\\s*')([^'\\\\\\r\\n]*(?:\\\\.[^'\\\\\\r\\n]*)*)(')", Regexp::IGNORECASE)
-    LINE_BREAK_PATTERN = Regexp.new("(?:\\p{Blank}*(\\r?\\n)\\p{Blank}*)+")
+    LINE_BREAK_PATTERN = Regexp.new("(?:[[:blank:]]*(\\r?\\n)[[:blank:]]*)+")
     SURROUNDING_SPACES_MIN_PATTERN = Regexp.new("\\s*(</?(?:" + BLOCK_TAGS_MIN.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
     SURROUNDING_SPACES_MAX_PATTERN = Regexp.new("\\s*(</?(?:" + BLOCK_TAGS_MAX.gsub(",", "|") + ")(?:>|[\\s/][^>]*>))\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
     SURROUNDING_SPACES_ALL_PATTERN = Regexp.new("\\s*(<[^>]+>)\\s*", Regexp::MULTILINE | Regexp::IGNORECASE)
