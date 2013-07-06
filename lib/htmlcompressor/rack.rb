@@ -43,7 +43,7 @@ module HtmlCompressor
         end
 
         content = @compressor.compress(content)
-        headers['Content-Length'] = content.length.to_s if headers['Content-Length']
+        headers['Content-Length'] = content.bytesize.to_s if headers['Content-Length']
 
         [status, headers, [content]]
       else
