@@ -1,3 +1,6 @@
+0.0.7 - 08/07/2013
+  Rack: use content.bytesize over content.length
+  Minor fixes to README
 0.0.6 - 19/04/2013
   Switch to POSIX "bracket expression" from \p{Blank} to provide better ruby compatibility
   Minor fixes to README
