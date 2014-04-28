@@ -1,10 +1,9 @@
-require 'htmlcompressor/compressor'
-require 'minitest/autorun'
-require 'closure-compiler'
+require 'test_helper'
+reset_default_options!
 
 module HtmlCompressor
 
-  class TestCompressor < MiniTest::Unit::TestCase
+  class TestCompressor < Minitest::Test
 
     def test_enabled
       source = read_resource("testEnabled.html")
@@ -74,43 +73,6 @@ module HtmlCompressor
       compressor = Compressor.new(
         :preserve_patterns => preservePatterns,
         :remove_comments => true,
-        :remove_intertag_spaces => true
-      )
-
-      assert_equal result, compressor.compress(source)
-    end
-
-    def test_compress_javascript_yui
-      source = read_resource("testCompressJavaScript.html");
-      result = read_resource("testCompressJavaScriptYuiResult.html");
-
-      compressor = Compressor.new(
-        :compress_javascript => true,
-        :remove_intertag_spaces => true
-      )
-
-      assert_equal result, compressor.compress(source)
-    end
-
-    def test_compress_java_script_closure
-      source = read_resource("testCompressJavaScript.html")
-      result = read_resource("testCompressJavaScriptClosureResult.html")
-
-      compressor = Compressor.new(
-        :compress_javascript => true,
-        :javascript_compressor => Closure::Compiler.new(:compilation_level => 'ADVANCED_OPTIMIZATIONS'),
-        :remove_intertag_spaces => true
-      )
-
-      assert_equal result, compressor.compress(source)
-    end
-
-    def test_compress_css
-      source = read_resource("testCompressCss.html")
-      result = read_resource("testCompressCssResult.html")
-
-      compressor = Compressor.new(
-        :compress_css => true,
         :remove_intertag_spaces => true
       )
 
@@ -244,18 +206,6 @@ module HtmlCompressor
       compressor = Compressor.new
 
       assert_equal result, compressor.compress(source)
-    end
-
-    private
-
-    def resource_path
-      File.join File.expand_path(File.dirname(__FILE__)), 'resources', 'html'
-    end
-
-    def read_resource file
-      File.open File.join(resource_path, file), 'r' do |f|
-        return f.readlines.join('')
-      end
     end
 
   end
