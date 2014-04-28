@@ -1,4 +1,4 @@
-require "yui/compressor"
+require "htmlcompressor/exceptions"
 
 module HtmlCompressor
   class Compressor
@@ -125,12 +125,6 @@ module HtmlCompressor
     def initialize(options = {})
 
       @options = DEFAULT_OPTIONS.merge(options)
-
-      # YUICompressor settings
-      @yuiCssLineBreak = -1
-      @yuiJsNoMunge = false
-      @yuiJsPreserveAllSemiColons = false
-      @yuiJsDisableOptimizations = false
 
     end
 
@@ -468,12 +462,7 @@ module HtmlCompressor
       javaScriptCompressor = @options[:javascript_compressor]
 
       if javaScriptCompressor.nil?
-        javaScriptCompressor = YUI::JavaScriptCompressor.new(
-          :munge => !@yuiJsNoMunge,
-          :preserve_semicolons => !@yuiJsDisableOptimizations,
-          :optimize => !@yuiJsDisableOptimizations,
-          :line_break => @yuiJsLineBreak
-        )
+        raise MissingCompressorError, "No JavaScript Compressor. Please set the :javascript_compressor option"
       end
 
       # detect CDATA wrapper
@@ -497,7 +486,7 @@ module HtmlCompressor
       cssCompressor = @options[:css_compressor]
 
       if cssCompressor.nil?
-        cssCompressor = YUI::CssCompressor.new(:line_break => @yuiCssLineBreak)
+        raise MissingCompressorError, "No CSS Compressor. Please set the :css_compressor option"
       end
 
       # detect CDATA wrapper

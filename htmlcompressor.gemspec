@@ -8,10 +8,10 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{htmlcompressor provides a class and a rack middleware to minify html pages}
   gem.homepage      = ""
 
-  gem.add_dependency 'yui-compressor', '~> 0.9.6'
-  gem.add_development_dependency 'closure-compiler', '~> 1.1.5'
+  gem.add_development_dependency 'yui-compressor', '~> 0.9'
+  gem.add_development_dependency 'closure-compiler', '~> 1.1'
   gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'minitest', '~> 5.0'
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
