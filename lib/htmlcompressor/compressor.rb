@@ -1,3 +1,5 @@
+require "htmlcompressor/exceptions"
+
 module HtmlCompressor
   class Compressor
 
@@ -460,7 +462,7 @@ module HtmlCompressor
       javaScriptCompressor = @options[:javascript_compressor]
 
       if javaScriptCompressor.nil?
-        raise "No JavaScript Compressor. Please set the :javascript_compressor option"
+        raise MissingCompressorError, "No JavaScript Compressor. Please set the :javascript_compressor option"
       end
 
       # detect CDATA wrapper
@@ -484,7 +486,7 @@ module HtmlCompressor
       cssCompressor = @options[:css_compressor]
 
       if cssCompressor.nil?
-        raise "No CSS Compressor. Please set the :css_compressor option"
+        raise MissingCompressorError, "No CSS Compressor. Please set the :css_compressor option"
       end
 
       # detect CDATA wrapper
