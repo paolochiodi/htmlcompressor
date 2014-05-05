@@ -1,6 +1,4 @@
 require 'test_helper'
-reset_default_options!
-require 'htmlcompressor/yui'
 
 module HtmlCompressor
 
@@ -12,6 +10,7 @@ module HtmlCompressor
 
       compressor = Compressor.new(
         :compress_javascript => true,
+        :javascript_compressor => :yui,
         :remove_intertag_spaces => true
       )
 
@@ -24,6 +23,7 @@ module HtmlCompressor
 
       compressor = Compressor.new(
         :compress_css => true,
+        :css_compressor => :yui,
         :remove_intertag_spaces => true
       )
 

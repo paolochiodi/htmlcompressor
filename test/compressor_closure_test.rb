@@ -1,6 +1,4 @@
 require 'test_helper'
-reset_default_options!
-require 'htmlcompressor/closure'
 
 module HtmlCompressor
 
@@ -12,7 +10,7 @@ module HtmlCompressor
 
       compressor = Compressor.new(
         :compress_javascript => true,
-        # :javascript_compressor => Closure::Compiler.new(:compilation_level => 'ADVANCED_OPTIMIZATIONS'),
+        :javascript_compressor => :closure,
         :remove_intertag_spaces => true
       )
 
