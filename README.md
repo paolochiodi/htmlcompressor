@@ -1,4 +1,5 @@
 # Htmlcompressor
+[![Build Status](https://travis-ci.org/paolochiodi/htmlcompressor.svg?branch=master)](https://travis-ci.org/paolochiodi/htmlcompressor)
 
 ## Put your html on a diet
 
