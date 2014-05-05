@@ -1,5 +1,4 @@
 require 'test_helper'
-reset_default_options!
 
 module HtmlCompressor
 

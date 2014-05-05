@@ -1,15 +1,6 @@
 require 'minitest/autorun'
 require 'htmlcompressor/compressor'
 
-def reset_default_options!
-  HtmlCompressor::Compressor::DEFAULT_OPTIONS.merge!(
-    :compress_javascript => false,
-    :javascript_compressor => nil,
-    :compress_css => false,
-    :css_compressor => nil
-  )
-end
-
 module HtmlCompressor
 
   class TestCompressor < Minitest::Test
