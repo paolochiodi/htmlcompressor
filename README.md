@@ -81,31 +81,53 @@ Rails 2.3 users may need to add
 
 ## CSS and JavaScript Compression
 
-By default CSS/JS compression is disabled. You need to supply a compressor in the options hash or use one of the requires below. A compressor can be any object that responds to `:compress`. E.g.: `compressed = compressor.compress(source)`
+By default CSS/JS compression is disabled.
+In order to minify in page javascript and css, you need to supply a compressor in the options hash.
+A compressor can be `:yui` or `:closure` or any object that responds to `:compress`. E.g.: `compressed = compressor.compress(source)`
 
 ```ruby
+
+  class MyCompressor
+
+    def compress(source)
+      return 'minified'
+    end
+
+  end
+
   options = {
     :compress_css => true,
-    :css_compressor => ...,
+    :css_compressor => MyCompressor.new,
     :compress_javascript => true,
-    :javascript_compressor => ...
+    :javascript_compressor => MyCompressor.new
   }
+
 ```
 
-Reasonable settings are included for the YUI and closure compressors, but you must include the gems yourself.
+Please note that in order to use yui or closure compilers you need to manually add them to the Gemfile
 
 ```ruby
   gem 'yui-compressor'
+
   ...
-  require 'htmlcompressor/yui'            # CSS & JS, or
-  require 'htmlcompressor/yui/javascript' # just JS, or
-  require 'htmlcompressor/yui/css'        # just CSS
+
+  options = {
+    :compress_javscript => true,
+    :javascript_compressor => :yui,
+    :compress_css => true
+    :css_compressor => :yui
+  }
 ```
 
 ```ruby
   gem 'closure-compiler'
+
   ...
-  require 'htmlcompressor/closure'        # JS
+
+  options = {
+    :compress_javascript => true,
+    :javascript_compressor => :closure
+  }
 ```
 
 ## Statistics
