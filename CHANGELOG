@@ -1,3 +1,8 @@
+0.1.1 - 08/05/2014
+  Remove type=text/css from style elements (fixes #15)
+0.1.0 - 05/05/2014
+  Do not depend on yui
+  Allow other javascript and css minifier (yui/closuer by default)
 0.0.7 - 08/07/2013
   Rack: use content.bytesize over content.length
   Minor fixes to README
