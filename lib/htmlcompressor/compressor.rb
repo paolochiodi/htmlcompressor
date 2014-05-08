@@ -65,7 +65,7 @@ module HtmlCompressor
     TYPE_ATTR_PATTERN = Regexp.new("type\\s*=\\s*([\\\"']*)(.+?)\\1", Regexp::MULTILINE | Regexp::IGNORECASE)
     JS_TYPE_ATTR_PATTERN = Regexp.new("(<script[^>]*)type\\s*=\\s*([\"']*)(?:text|application)\/javascript\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     JS_LANG_ATTR_PATTERN = Regexp.new("(<script[^>]*)language\\s*=\\s*([\"']*)javascript\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
-    STYLE_TYPE_ATTR_PATTERN = Regexp.new("(<style[^>]*)type\\s*=\\s*([\"']*)text/style\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
+    STYLE_TYPE_ATTR_PATTERN = Regexp.new("(<style[^>]*)type\\s*=\\s*([\"']*)text/(?:style|css)\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     LINK_TYPE_ATTR_PATTERN = Regexp.new("(<link[^>]*)type\\s*=\\s*([\"']*)text/(?:css|plain)\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     LINK_REL_ATTR_PATTERN = Regexp.new("<link(?:[^>]*)rel\\s*=\\s*([\"']*)(?:alternate\\s+)?stylesheet\\1(?:[^>]*)>", Regexp::MULTILINE | Regexp::IGNORECASE)
     FORM_METHOD_ATTR_PATTERN = Regexp.new("(<form[^>]*)method\\s*=\\s*([\"']*)get\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
