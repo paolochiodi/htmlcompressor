@@ -70,7 +70,7 @@ module HtmlCompressor
     LINK_REL_ATTR_PATTERN = Regexp.new("<link(?:[^>]*)rel\\s*=\\s*([\"']*)(?:alternate\\s+)?stylesheet\\1(?:[^>]*)>", Regexp::MULTILINE | Regexp::IGNORECASE)
     FORM_METHOD_ATTR_PATTERN = Regexp.new("(<form[^>]*)method\\s*=\\s*([\"']*)get\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     INPUT_TYPE_ATTR_PATTERN = Regexp.new("(<input[^>]*)type\\s*=\\s*([\"']*)text\\2([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
-    BOOLEAN_ATTR_PATTERN = Regexp.new("(<\\w+[^>]*)(checked|selected|disabled|readonly)\\s*=\\s*([\"']*)\\w*\\3([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
+    BOOLEAN_ATTR_PATTERN = Regexp.new("(<\\w+[^>]*[\"' ])(checked|selected|disabled|readonly)\\s*=\\s*([\"']*)\\w*\\3([^>]*>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     EVENT_JS_PROTOCOL_PATTERN = Regexp.new("^javascript:\\s*(.+)", Regexp::MULTILINE | Regexp::IGNORECASE)
     HTTP_PROTOCOL_PATTERN = Regexp.new("(<[^>]+?(?:href|src|cite|action)\\s*=\\s*['\"])http:(//[^>]+?>)", Regexp::MULTILINE | Regexp::IGNORECASE)
     HTTPS_PROTOCOL_PATTERN = Regexp.new("(<[^>]+?(?:href|src|cite|action)\\s*=\\s*['\"])https:(//[^>]+?>)", Regexp::MULTILINE | Regexp::IGNORECASE)
