@@ -113,7 +113,7 @@ Please note that in order to use yui or closure compilers you need to manually a
   ...
 
   options = {
-    :compress_javscript => true,
+    :compress_javascript => true,
     :javascript_compressor => :yui,
     :compress_css => true
     :css_compressor => :yui
