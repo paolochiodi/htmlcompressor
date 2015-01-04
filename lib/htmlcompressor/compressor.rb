@@ -317,6 +317,9 @@ module HtmlCompressor
           elsif type == 'text/x-jquery-tmpl'
             # jquery template, ignore so it gets compressed with the rest of html
             match
+          elsif !@options[:custom_js_html_template].nil? and @options[:custom_js_html_template].include?(type)
+            # ignore custom javascript html templates so it gets compressed with the rest of html
+            match            
           else
             # some custom script, preserve it inside "skip blocks" so it won't be compressed with js compressor
             skipBlocks << group_2

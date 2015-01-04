@@ -86,6 +86,15 @@ module HtmlCompressor
 
       assert_equal result, compressor.compress(source)
     end
+        
+    def test_compress_custom_html_templates
+      source = read_resource("testCompressCustomHtmlTemplates.html")
+      result = read_resource("testCompressCustomHtmlTemplatesResult.html")
+
+      compressor = Compressor.new(:custom_js_html_template => ['text/html'])
+
+      assert_equal result, compressor.compress(source)
+    end
 
     def test_simple_doctype
       source = read_resource("testSimpleDoctype.html")
@@ -206,7 +215,6 @@ module HtmlCompressor
 
       assert_equal result, compressor.compress(source)
     end
-
   end
 
 end
