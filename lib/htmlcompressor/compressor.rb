@@ -128,9 +128,7 @@ module HtmlCompressor
       :preserve_line_breaks => false,
       :remove_surrounding_spaces => nil,
 
-      :preserve_patterns => nil,
-      :javascript_compressor => nil,
-      :css_compressor => nil
+      :preserve_patterns => nil
     }
 
     def initialize(options = {})
