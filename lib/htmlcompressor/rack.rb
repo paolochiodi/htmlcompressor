@@ -17,7 +17,7 @@ module HtmlCompressor
       :remove_form_attributes => false,
       :remove_input_attributes => true,
       :remove_javascript_protocol => true,
-      :remove_http_protocol => true,
+      :remove_http_protocol => false,
       :remove_https_protocol => false,
       :preserve_line_breaks => false,
       :simple_boolean_attributes => true
