@@ -15,69 +15,69 @@ Please note that Htmlcompressor is still in alpha version and need some addition
 Using the compressor class is straightforward:
 
 ```ruby
-  compressor = HtmlCompressor::Compressor.new
-  compressor.compress('<html><body><div id="compress_me"></div></body></html>')
+compressor = HtmlCompressor::Compressor.new
+compressor.compress('<html><body><div id="compress_me"></div></body></html>')
 ```
 
 The compressor ships with basic and safe default options that may be overwritten passing the options hash to the constructor:
 
 ```ruby
-  options = {
-    :enabled => true,
-    :remove_multi_spaces => true,
-    :remove_comments => true,
-    :remove_intertag_spaces => false,
-    :remove_quotes => false,
-    :compress_css => false,
-    :compress_javascript => false,
-    :simple_doctype => false,
-    :remove_script_attributes => false,
-    :remove_style_attributes => false,
-    :remove_link_attributes => false,
-    :remove_form_attributes => false,
-    :remove_input_attributes => false,
-    :remove_javascript_protocol => false,
-    :remove_http_protocol => false,
-    :remove_https_protocol => false,
-    :preserve_line_breaks => false,
-    :simple_boolean_attributes => false
-  }
+options = {
+  :enabled => true,
+  :remove_multi_spaces => true,
+  :remove_comments => true,
+  :remove_intertag_spaces => false,
+  :remove_quotes => false,
+  :compress_css => false,
+  :compress_javascript => false,
+  :simple_doctype => false,
+  :remove_script_attributes => false,
+  :remove_style_attributes => false,
+  :remove_link_attributes => false,
+  :remove_form_attributes => false,
+  :remove_input_attributes => false,
+  :remove_javascript_protocol => false,
+  :remove_http_protocol => false,
+  :remove_https_protocol => false,
+  :preserve_line_breaks => false,
+  :simple_boolean_attributes => false
+}
 ```
 
 Using rack middleware is as easy as:
 
 ```ruby
-  config.middleware.use HtmlCompressor::Rack, options
+config.middleware.use HtmlCompressor::Rack, options
 ```
 
 The middleware uses a little more aggressive options by default:
 
 ```ruby
-  options = {
-    :enabled => true,
-    :remove_multi_spaces => true,
-    :remove_comments => true,
-    :remove_intertag_spaces => false,
-    :remove_quotes => true,
-    :compress_css => false,
-    :compress_javascript => false,
-    :simple_doctype => false,
-    :remove_script_attributes => true,
-    :remove_style_attributes => true,
-    :remove_link_attributes => true,
-    :remove_form_attributes => false,
-    :remove_input_attributes => true,
-    :remove_javascript_protocol => true,
-    :remove_http_protocol => true,
-    :remove_https_protocol => false,
-    :preserve_line_breaks => false,
-    :simple_boolean_attributes => true
-  }
+options = {
+  :enabled => true,
+  :remove_multi_spaces => true,
+  :remove_comments => true,
+  :remove_intertag_spaces => false,
+  :remove_quotes => true,
+  :compress_css => false,
+  :compress_javascript => false,
+  :simple_doctype => false,
+  :remove_script_attributes => true,
+  :remove_style_attributes => true,
+  :remove_link_attributes => true,
+  :remove_form_attributes => false,
+  :remove_input_attributes => true,
+  :remove_javascript_protocol => true,
+  :remove_http_protocol => true,
+  :remove_https_protocol => false,
+  :preserve_line_breaks => false,
+  :simple_boolean_attributes => true
+}
 ```
 
 Rails 2.3 users may need to add
 ```ruby
-  require 'htmlcompressor'
+require 'htmlcompressor'
 ```
 
 ## CSS and JavaScript Compression
@@ -87,48 +87,46 @@ In order to minify in page javascript and css, you need to supply a compressor i
 A compressor can be `:yui` or `:closure` or any object that responds to `:compress`. E.g.: `compressed = compressor.compress(source)`
 
 ```ruby
+class MyCompressor
 
-  class MyCompressor
-
-    def compress(source)
-      return 'minified'
-    end
-
+  def compress(source)
+    return 'minified'
   end
 
-  options = {
-    :compress_css => true,
-    :css_compressor => MyCompressor.new,
-    :compress_javascript => true,
-    :javascript_compressor => MyCompressor.new
-  }
+end
 
+options = {
+  :compress_css => true,
+  :css_compressor => MyCompressor.new,
+  :compress_javascript => true,
+  :javascript_compressor => MyCompressor.new
+}
 ```
 
 Please note that in order to use yui or closure compilers you need to manually add them to the Gemfile
 
 ```ruby
-  gem 'yui-compressor'
+gem 'yui-compressor'
 
-  ...
+...
 
-  options = {
-    :compress_javscript => true,
-    :javascript_compressor => :yui,
-    :compress_css => true
-    :css_compressor => :yui
-  }
+options = {
+  :compress_javscript => true,
+  :javascript_compressor => :yui,
+  :compress_css => true
+  :css_compressor => :yui
+}
 ```
 
 ```ruby
-  gem 'closure-compiler'
+gem 'closure-compiler'
 
-  ...
+...
 
-  options = {
-    :compress_javascript => true,
-    :javascript_compressor => :closure
-  }
+options = {
+  :compress_javascript => true,
+  :javascript_compressor => :closure
+}
 ```
 
 ## Statistics
