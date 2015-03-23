@@ -80,6 +80,16 @@ Rails 2.3 users may need to add
 require 'htmlcompressor'
 ```
 
+## Custom preservation rules
+
+If you need to define custom preservation rules, you can list regular expressions in the `preserve_patterns` option. For example, to preserve PHP blocks you might want to define:
+
+```ruby
+options = {
+  :preserve_patterns => [/<\?php.*?\?>/im]
+}
+```
+
 ## CSS and JavaScript Compression
 
 By default CSS/JS compression is disabled.
