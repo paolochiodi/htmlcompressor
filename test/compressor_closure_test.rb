@@ -11,7 +11,8 @@ module HtmlCompressor
       compressor = Compressor.new(
         :compress_javascript => true,
         :javascript_compressor => :closure,
-        :remove_intertag_spaces => true
+        :remove_intertag_spaces => true,
+        :compress_js_templates => true
       )
 
       assert_equal result, compressor.compress(source)

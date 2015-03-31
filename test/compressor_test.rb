@@ -82,7 +82,7 @@ module HtmlCompressor
       source = read_resource("testCompress.html")
       result = read_resource("testCompressResult.html")
 
-      compressor = Compressor.new
+      compressor = Compressor.new(:compress_js_templates => true)
 
       assert_equal result, compressor.compress(source)
     end
@@ -204,6 +204,13 @@ module HtmlCompressor
 
       compressor = Compressor.new
 
+      assert_equal result, compressor.compress(source)
+    end
+
+    def test_compress_custom_html_templates
+      source = read_resource("testCompressCustomHtmlTemplates.html")
+      result = read_resource("testCompressCustomHtmlTemplatesResult.html")
+      compressor = Compressor.new(:compress_js_templates => ['text/html'], :remove_quotes => true)
       assert_equal result, compressor.compress(source)
     end
 

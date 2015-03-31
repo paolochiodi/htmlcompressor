@@ -135,6 +135,21 @@ module HtmlCompressor
 
       @options = DEFAULT_OPTIONS.merge(options)
 
+      if @options[:compress_js_templates]
+        @options[:remove_quotes] = false
+
+        js_template_types = [ 'text/x-jquery-tmpl' ]
+
+        unless @options[:compress_js_templates].is_a? TrueClass
+          js_template_types << @options[:compress_js_templates]
+          js_template_types.flatten!
+        end
+
+        @options[:js_template_types] = js_template_types
+      else
+        @options[:js_template_types] = []
+      end
+
       detect_external_compressors
     end
 
@@ -312,7 +327,7 @@ module HtmlCompressor
             scriptBlocks << group_2
             index += 1
             group_1 + message_format(TEMP_SCRIPT_BLOCK, index) + group_3
-          elsif type == 'text/x-jquery-tmpl'
+          elsif @options[:js_template_types].include?(type)
             # jquery template, ignore so it gets compressed with the rest of html
             match
           else

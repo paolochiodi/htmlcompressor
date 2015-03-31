@@ -40,7 +40,8 @@ The compressor ships with basic and safe default options that may be overwritten
     :remove_http_protocol => false,
     :remove_https_protocol => false,
     :preserve_line_breaks => false,
-    :simple_boolean_attributes => false
+    :simple_boolean_attributes => false,
+    :compress_js_templates => false
   }
 ```
 
@@ -80,6 +81,14 @@ Rails 2.3 users may need to add
   require 'htmlcompressor'
 ```
 
+## Javascript template compression
+
+You can compress javascript templates that are present in the html.
+Setting the `:compress_js_templates` options to `true` will by default compress the content of script tags marked with `type="text/x-jquery-tmpl"`.
+For compressing other types of templates, you can pass a string (or an array of strings) containing the type: `:compress_js_templates => ['text/html']`.
+Please note that activating template compression will disable the removal of quotes from attributes values, as this could lead to unexpected errors with compiled templates.
+
+
 ## CSS and JavaScript Compression
 
 By default CSS/JS compression is disabled.
@@ -113,7 +122,7 @@ Please note that in order to use yui or closure compilers you need to manually a
   ...
 
   options = {
-    :compress_javscript => true,
+    :compress_javascript => true,
     :javascript_compressor => :yui,
     :compress_css => true
     :css_compressor => :yui
