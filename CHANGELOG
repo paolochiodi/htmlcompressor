@@ -1,5 +1,7 @@
-0.2.0 - TBD
+0.2.0 - 32/03/2015
+  Remove warnings in ruby 2.2
   Support for custom html templates
+  Disable remove_http_protocol by default in the middleware
 0.1.2 - 04/09/2014
   Preserve custom attributes similar to simple attributes, such as ng-disabled (fixes #12)
 0.1.1 - 08/05/2014
