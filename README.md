@@ -45,10 +45,16 @@ options = {
 }
 ```
 
-Using rack middleware is as easy as:
+Using rack middleware (in rails) is as easy as:
 
 ```ruby
 config.middleware.use HtmlCompressor::Rack, options
+```
+
+And in sinatra:
+
+```ruby
+use HtmlCompressor::Rack, options
 ```
 
 The middleware uses a little more aggressive options by default:
