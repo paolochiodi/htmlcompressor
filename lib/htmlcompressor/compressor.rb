@@ -531,17 +531,11 @@ module HtmlCompressor
       end
 
       # detect CDATA wrapper
-      cdataWrapper = false
       if source =~ CDATA_PATTERN
-        cdataWrapper = true
         source = $1
       end
 
       result = javascript_compressor.compress(source).strip
-
-      if cdataWrapper
-        result = "<![CDATA[" + result + "]]>"
-      end
 
       result
     end
