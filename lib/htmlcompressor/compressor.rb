@@ -540,7 +540,7 @@ module HtmlCompressor
       result = javascript_compressor.compress(source).strip
 
       if cdataWrapper
-        result = "<![CDATA[" + result + "]]>"
+        result = "/*<![CDATA[*/" + result + "/*]]>*/"
       end
 
       result
