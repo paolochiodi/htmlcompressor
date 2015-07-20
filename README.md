@@ -138,7 +138,7 @@ gem 'yui-compressor'
 options = {
   :compress_javascript => true,
   :javascript_compressor => :yui,
-  :compress_css => true
+  :compress_css => true,
   :css_compressor => :yui
 }
 ```
