@@ -24,6 +24,7 @@ The compressor ships with basic and safe default options that may be overwritten
 ```ruby
 options = {
   :enabled => true,
+  :remove_spaces_inside_tags => true,
   :remove_multi_spaces => true,
   :remove_comments => true,
   :remove_intertag_spaces => false,
