@@ -6,7 +6,8 @@
 Htmlcompressor provides tools to minify html code.
 It includes
 - HtmlCompressor::Compressor class which is a raw port of [google's htmlcompressor](http://code.google.com/p/htmlcompressor/)
-- HtmlCompressor::Rack a rack middleware to compress html pages on the fly
+- HtmlCompressor::Rack a rack middleware to compress html pages on the fly.
+Beware that the compressor has proved to be too slow in many circunstances to be used for on the fly or real time execution. I encourage you to use it only for build-time optimisations or decrease the number of optimisations that are run at execution time.
 
 Please note that Htmlcompressor is still in alpha version and need some additional love.
 
