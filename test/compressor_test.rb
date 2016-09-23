@@ -22,6 +22,16 @@ module HtmlCompressor
       assert_equal result, compressor.compress(source)
     end
 
+    def test_remove_spaces_inside_tags_disabled
+      source = read_resource("testRemoveSpacesInsideTags.html")
+      result = read_resource("testRemoveSpacesInsideTagsDisabledResult.html")
+
+      compressor = Compressor.new(:remove_multi_spaces => false, :remove_spaces_inside_tags => false)
+
+      assert_equal result, compressor.compress(source)
+    end
+
+
     def test_remove_comments
       source = read_resource("testRemoveComments.html")
       result = read_resource("testRemoveCommentsResult.html")

@@ -107,6 +107,7 @@ module HtmlCompressor
       # default settings
       :remove_comments => true,
       :remove_multi_spaces => true,
+      :remove_spaces_inside_tags => true,
 
       # optional settings
       :javascript_compressor => :yui,
@@ -757,23 +758,24 @@ module HtmlCompressor
     def remove_spaces_inside_tags(html)
       #remove spaces around equals sign inside tags
 
-      html = html.gsub(TAG_PROPERTY_PATTERN, '\1=')
+      if @options[:remove_spaces_inside_tags]
+        html = html.gsub(TAG_PROPERTY_PATTERN, '\1=')
 
-      #remove ending spaces inside tags
+        #remove ending spaces inside tags
 
-      html.gsub!(TAG_END_SPACE_PATTERN) do |match|
+        html.gsub!(TAG_END_SPACE_PATTERN) do |match|
 
-        group_1 = $1
-        group_2 = $2
+          group_1 = $1
+          group_2 = $2
 
-        # keep space if attribute value is unquoted before trailing slash
-        if group_2.start_with?("/") and (TAG_LAST_UNQUOTED_VALUE_PATTERN =~ group_1)
-          "#{group_1} #{group_2}"
-        else
-          "#{group_1}#{group_2}"
+          # keep space if attribute value is unquoted before trailing slash
+          if group_2.start_with?("/") and (TAG_LAST_UNQUOTED_VALUE_PATTERN =~ group_1)
+            "#{group_1} #{group_2}"
+          else
+            "#{group_1}#{group_2}"
+          end
         end
       end
-
 
       html
     end
