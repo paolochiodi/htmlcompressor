@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'yui-compressor', '~> 0.9'
   gem.add_development_dependency 'closure-compiler', '~> 1.1'
-  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rake', '~> 10.3.2'
   gem.add_development_dependency 'minitest', '~> 5.0'
 
   gem.files         = `git ls-files`.split($\)
