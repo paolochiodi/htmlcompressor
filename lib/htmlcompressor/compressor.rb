@@ -385,6 +385,16 @@ module HtmlCompressor
 
     def return_blocks(html, preBlocks, taBlocks, scriptBlocks, styleBlocks, eventBlocks, condCommentBlocks, skipBlocks, lineBreakBlocks, userBlocks)
 
+      # put skip blocks back
+      html = html.gsub(TEMP_SKIP_PATTERN) do |match|
+        i = $1.to_i
+        if skipBlocks.size > i
+          skipBlocks[i]
+        else
+          ''
+        end
+      end
+
       # put line breaks back
       if @options[:preserve_line_breaks]
         html = html.gsub(TEMP_LINE_BREAK_PATTERN) do |match|
@@ -455,15 +465,6 @@ module HtmlCompressor
         end
       end
 
-      # put skip blocks back
-      html = html.gsub(TEMP_SKIP_PATTERN) do |match|
-        i = $1.to_i
-        if skipBlocks.size > i
-          skipBlocks[i]
-        else
-          ''
-        end
-      end
 
       # put user blocks back
       unless @options[:preserve_patterns].nil?
