@@ -224,6 +224,41 @@ module HtmlCompressor
       assert_equal result, compressor.compress(source)
     end
 
+    def test_javascript_compressor_not_found
+      source = read_resource("testCompressJavaScript.html");
+
+      compressor = Compressor.new(
+        :compress_javascript => true,
+        :javascript_compressor => :not_existing_compressor,
+        :remove_intertag_spaces => true,
+        :compress_js_templates => true
+      )
+
+      exception = assert_raises(NotFoundCompressorError) do
+        compressor.compress(source)
+      end
+
+      expect_message = 'JavaScript Compressor "not_existing_compressor" not found, please check :javascript_compressor option'
+      assert_equal(expect_message, exception.message)
+    end
+
+    def test_css_compressor_not_found
+      source = read_resource("testCompressCss.html");
+
+      compressor = Compressor.new(
+        :enabled => true,
+        :compress_css => true,
+        :css_compressor => :not_existing_compressor,
+        :compress_javascript => false
+      )
+
+      exception = assert_raises(NotFoundCompressorError) do
+        compressor.compress(source)
+      end
+
+      expect_message = 'CSS Compressor "not_existing_compressor" not found, please check :css_compressor option'
+      assert_equal(expect_message, exception.message)
+    end
   end
 
 end
