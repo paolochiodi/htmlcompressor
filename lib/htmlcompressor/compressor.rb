@@ -528,7 +528,11 @@ module HtmlCompressor
       end
 
       if javascript_compressor.nil?
-        raise MissingCompressorError, "No JavaScript Compressor. Please set the :javascript_compressor option"
+        if @options[:javascript_compressor].is_a?(Symbol)
+          raise NotFoundCompressorError, "JavaScript Compressor \"#{@options[:javascript_compressor]}\" not found, please check :javascript_compressor option"
+        else
+          raise MissingCompressorError, "No JavaScript Compressor. Please set the :javascript_compressor option"
+        end
       end
 
       # detect CDATA wrapper
@@ -556,7 +560,11 @@ module HtmlCompressor
       end
 
       if css_compressor.nil?
-        raise MissingCompressorError, "No CSS Compressor. Please set the :css_compressor option"
+        if @options[:css_compressor].is_a?(Symbol)
+          raise NotFoundCompressorError, "CSS Compressor \"#{@options[:css_compressor]}\" not found, please check :css_compressor option"
+        else
+          raise MissingCompressorError, "No CSS Compressor. Please set the :css_compressor option"
+        end
       end
 
       # detect CDATA wrapper
