@@ -47,6 +47,10 @@ options = {
 }
 ```
 
+Htmlcompressor also ships a rack middleware that can be used with rails, sinatra or rack.
+
+** However keep in mind that compression is slow (especially when also compressing javascript or css) and can negatively impact the performance of your website. Take your measurements and adopt a different strategy if necessary **
+
 Using rack middleware (in rails) is as easy as:
 
 ```ruby
