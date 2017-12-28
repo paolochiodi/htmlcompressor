@@ -224,6 +224,13 @@ module HtmlCompressor
       assert_equal result, compressor.compress(source)
     end
 
+    def test_dont_replace_javascript_inside_js_templates
+      source = read_resource("testCompressCustomHtmlTemplates.html")
+      result = read_resource("testCompressCustomHtmlTemplates.html")
+      compressor = Compressor.new(:compress_js_templates => false, :remove_quotes => true)
+      assert_equal result, compressor.compress(source)
+    end
+
     def test_javascript_compressor_not_found
       source = read_resource("testCompressJavaScript.html");
 
